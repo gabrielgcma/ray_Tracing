@@ -7,4 +7,5 @@ Render atual:
 
 <p align="center"> 
   <img src="https://i.ibb.co/B2jgxvN/Screenshot-from-2022-08-28-11-46-26.png">
+  <img src="./img.ppm">
 </p>
