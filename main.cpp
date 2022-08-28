@@ -1,43 +1,26 @@
+#include "utilitarios.h"
+
 #include "cor.h"
-#include "vec3.h"
-#include "ray.h"
+#include "objs_hitaveis.h"
+#include "esfera.h"
 
 #include <iostream>
 
 using std::cout;
 using std::cin;
 
-// Calcular se um raio atinge a esfera
-double hit_esfera(const Point3& centro, double raio, const Ray& r)
-{
-    Vec3 oc = r.origem() - centro;
-    auto a = r.direcao().comprimento_ao_quadrado();
-    auto b_sobre_dois = escalar(oc, r.direcao());
-    auto c = oc.comprimento_ao_quadrado() - raio*raio;
-    auto delta = b_sobre_dois*b_sobre_dois - a*c;
-    
-    if(delta < 0)
-    {
-        return -1.0;
-    } else 
-    {
-        return (-b_sobre_dois - sqrt(delta)) / a;
-    }
-}
-
 // Calcular a cor de um pixel atingido por um raio
-Cor ray_cor(const Ray& r)
+Cor ray_cor(const Ray& r, const Hitavel& mundo)
 {
-    auto t = hit_esfera(Point3(0, 0, -1), 0.5,  r);
-    if(t > 0.0)
+    Hit_registro reg;
+    if(mundo.hit(r, 0, infinito, reg))
     {
-        Vec3 n = unitario(r.at(t) - Vec3(0, 0, -1));
-        return 0.5*Cor(n.x()+1, n.y()+1, n.z()+1);
+        return 0.5*(reg.normal + Cor(1,  1, 1));
     }
 
     Vec3 unitario_direcao = unitario(r.direcao());
     
-    t = 0.5*(unitario_direcao.y() + 1.0);
+    auto t = 0.5*(unitario_direcao.y() + 1.0);
     return (1.0-t)*Cor(1.0, 1.0, 1.0) + t*Cor(0.5, 0.7, 1.0);
 }   
 
@@ -47,6 +30,11 @@ int main()
     const auto aspect_ratio = 16.0/9.0; 
     const int imgWidth = 800;
     const int imgHeight = static_cast<int>(imgWidth / aspect_ratio);
+
+    // Mundo 
+    Objs_Hitaveis mundo;
+    mundo.add(make_shared<Esfera>(Point3(0, 0, -1), 0.5));
+    mundo.add(make_shared<Esfera>(Point3(0, -100.5, -1), 100));
 
     // Câmera
     auto viewport_height = 2.0;
@@ -70,7 +58,7 @@ int main()
             auto u = double(j) / (imgWidth-1);
             auto v = double(i) / (imgHeight-1);
             Ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
-            Cor cor_pixel = ray_cor(r);
+            Cor cor_pixel = ray_cor(r, mundo);
             escrever_cor(cout, cor_pixel);
         }
     }
