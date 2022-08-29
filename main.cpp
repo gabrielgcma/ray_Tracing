@@ -3,6 +3,7 @@
 #include "cor.h"
 #include "objs_hitaveis.h"
 #include "esfera.h"
+#include "camera.h"
 
 #include <iostream>
 
@@ -30,6 +31,7 @@ int main()
     const auto aspect_ratio = 16.0/9.0; 
     const int imgWidth = 800;
     const int imgHeight = static_cast<int>(imgWidth / aspect_ratio);
+    const int samples_por_pixel = 100;
 
     // Mundo 
     Objs_Hitaveis mundo;
@@ -37,14 +39,7 @@ int main()
     mundo.add(make_shared<Esfera>(Point3(0, -100.5, -1), 100));
 
     // Câmera
-    auto viewport_height = 2.0;
-    auto viewport_width  = aspect_ratio * viewport_height;
-    auto focal_length = 1.0;
-
-    auto origin = Point3(0, 0, 0);
-    auto horizontal = Vec3(viewport_width, 0, 0);
-    auto vertical = Vec3(0, viewport_height, 0);
-    auto lower_left_corner = origin-(horizontal/2)-(vertical/2)-(Vec3(0, 0, focal_length));
+    Camera cam;
 
     // Render
     cout<<"P3\n"<<imgWidth<<' '<<imgHeight<<"\n255\n";
@@ -55,13 +50,18 @@ int main()
         std::cerr<<"\rScanlines restantes: "<<i<<' '<<std::flush;
         for(int j=0; j<imgWidth; ++j)
         {
-            auto u = double(j) / (imgWidth-1);
-            auto v = double(i) / (imgHeight-1);
-            Ray r(origin, lower_left_corner + u*horizontal + v*vertical - origin);
-            Cor cor_pixel = ray_cor(r, mundo);
-            escrever_cor(cout, cor_pixel);
+            Cor cor_pixel(0, 0, 0);
+            for(int s=0; s<samples_por_pixel; ++s)
+            {
+                auto u = (j+double_aleatorio()) / (imgWidth-1);
+                auto v = (i+double_aleatorio()) / (imgHeight-1);
+
+                Ray r = cam.get_ray(u, v);
+
+                cor_pixel += ray_cor(r, mundo);    
+            }
+            escrever_cor(cout, cor_pixel, samples_por_pixel);
         }
     }
-
     std::cerr<<"\nConcluído.\n";
 }

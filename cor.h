@@ -4,12 +4,23 @@
 #include "vec3.h"
 #include <iostream>
 
-void escrever_cor (std::ostream &saida, Cor cor_pixel)
+// Usando Multi-sampling 
+void escrever_cor (std::ostream &saida, Cor cor_pixel, int samples_por_pixel)
 {      
+    auto r = cor_pixel.x();
+    auto g = cor_pixel.y();
+    auto b = cor_pixel.z();
+
+    // Dividir a cor pelo número de samples:
+    auto scale = 1.0 / samples_por_pixel;
+    r *= scale;
+    g *= scale;
+    b *= scale;
+ 
     // Escrever o valor traduzido [0, 255] de cada componente da cor
-    saida << static_cast<int>(255.999 * cor_pixel.x()) << ' '
-          << static_cast<int>(255.999 * cor_pixel.y()) << ' ' 
-          << static_cast<int>(255.999 * cor_pixel.z()) << '\n';
+    saida << static_cast<int>(256 * clamp(r, 0.0, 0.999)) << ' '
+          << static_cast<int>(256 * clamp(g, 0.0, 0.999)) << ' ' 
+          << static_cast<int>(256 * clamp(b, 0.0, 0.999)) << '\n';
 }
 
 #endif
