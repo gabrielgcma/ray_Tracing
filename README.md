@@ -6,5 +6,5 @@ Estágio atual: adicionando outros objetos hitáveis ao render.
 Render atual: 
 
 <p align="center"> .
-  <img src="./preview.png">  
+  <img src="./pre1.png">  
 </p>
