@@ -18,7 +18,7 @@ Cor ray_cor(const Ray& r, const Hitavel& mundo, int profundidade)
     // Se ultrapassamos o limite de reflexões do ray, nenhuma luz a mais é coletada
     if(profundidade <= 0) return Cor(0, 0, 0);
 
-    if(mundo.hit(r, 0, infinito, reg))
+    if(mundo.hit(r, 0.001, infinito, reg))
     {
         Point3 alvo = reg.p + reg.normal + random_esf_unitaria();
         return 0.5 * ray_cor(Ray(reg.p, alvo - reg.p), mundo, profundidade-1);
