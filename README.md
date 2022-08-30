@@ -5,6 +5,6 @@ Estágio atual: adicionando antialising e materiais difusos.
 
 Render atual: 
 
-<p align="center"> .
+<p align="center"> 
   <img src="./pre1.png">  
 </p>

@@ -72,6 +72,18 @@ class Vec3
         {
             return sqrt(comprimento_ao_quadrado());
         }
+        
+        inline static Vec3 aleatorio()
+        {
+            return Vec3(double_aleatorio(), double_aleatorio(), double_aleatorio());
+        }
+
+        inline static Vec3 aleatorio(double min, double max)
+        {
+            return Vec3(double_aleatorio(min, max), 
+                        double_aleatorio(min, max), 
+                        double_aleatorio(min, max));
+        }
 };
 
 // ---------------------------------------------
@@ -138,6 +150,18 @@ inline Vec3 prod_vetorial(const Vec3 &u, const Vec3 &v)
 inline Vec3 unitario(Vec3 v)
 {
     return v / v.comprimento();
+}
+
+// Pegar um ponto aleatório dentro de uma esfera unitária tangente à superfície do sólido 
+// para ser a direção aleatória do raio refletido (definição de difuso)
+Vec3 random_esf_unitaria()
+{
+    while(true)
+    {
+        auto p = Vec3::aleatorio(-1, 1);
+        if(p.comprimento_ao_quadrado() >= 1) continue;
+        return p;
+    }
 }
 
 // Outros aliases

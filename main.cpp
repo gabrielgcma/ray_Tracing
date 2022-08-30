@@ -11,16 +11,20 @@ using std::cout;
 using std::cin;
 
 // Calcular a cor de um pixel atingido por um raio
-Cor ray_cor(const Ray& r, const Hitavel& mundo)
+Cor ray_cor(const Ray& r, const Hitavel& mundo, int profundidade)
 {
     Hit_registro reg;
+
+    // Se ultrapassamos o limite de reflexões do ray, nenhuma luz a mais é coletada
+    if(profundidade <= 0) return Cor(0, 0, 0);
+
     if(mundo.hit(r, 0, infinito, reg))
     {
-        return 0.5*(reg.normal + Cor(1,  1, 1));
+        Point3 alvo = reg.p + reg.normal + random_esf_unitaria();
+        return 0.5 * ray_cor(Ray(reg.p, alvo - reg.p), mundo, profundidade-1);
     }
 
     Vec3 unitario_direcao = unitario(r.direcao());
-    
     auto t = 0.5*(unitario_direcao.y() + 1.0);
     return (1.0-t)*Cor(1.0, 1.0, 1.0) + t*Cor(0.5, 0.7, 1.0);
 }   
@@ -32,6 +36,7 @@ int main()
     const int imgWidth = 800;
     const int imgHeight = static_cast<int>(imgWidth / aspect_ratio);
     const int samples_por_pixel = 100;
+    const int max_profundidade = 50;
 
     // Mundo 
     Objs_Hitaveis mundo;
@@ -58,7 +63,7 @@ int main()
 
                 Ray r = cam.get_ray(u, v);
 
-                cor_pixel += ray_cor(r, mundo);    
+                cor_pixel += ray_cor(r, mundo, max_profundidade);    
             }
             escrever_cor(cout, cor_pixel, samples_por_pixel);
         }
