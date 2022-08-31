@@ -166,6 +166,16 @@ Vec3 random_esf_unitaria()
 
 Vec3 random_unitario() { return unitario(random_esf_unitaria()); }
 
+Vec3 random_no_hemisferio(const Vec3& normal)
+{
+    Vec3 na_esfera_unitaria = random_esf_unitaria();
+
+    if(escalar(na_esfera_unitaria, normal) > 0.0) // No mesmo hemisfério que a normal   
+        return na_esfera_unitaria;
+    else    
+        return -na_esfera_unitaria;
+}
+
 // Outros aliases
 using Point3 = Vec3; // Ponto 3D
 using Cor = Vec3; // cor RGB
