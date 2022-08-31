@@ -20,7 +20,7 @@ Cor ray_cor(const Ray& r, const Hitavel& mundo, int profundidade)
 
     if(mundo.hit(r, 0.001, infinito, reg))
     {
-        Point3 alvo = reg.p + reg.normal + random_esf_unitaria();
+        Point3 alvo = reg.p + reg.normal + random_unitario();
         return 0.5 * ray_cor(Ray(reg.p, alvo - reg.p), mundo, profundidade-1);
     }
 

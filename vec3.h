@@ -164,6 +164,8 @@ Vec3 random_esf_unitaria()
     }
 }
 
+Vec3 random_unitario() { return unitario(random_esf_unitaria()); }
+
 // Outros aliases
 using Point3 = Vec3; // Ponto 3D
 using Cor = Vec3; // cor RGB
