@@ -185,6 +185,11 @@ Vec3 random_no_hemisferio(const Vec3& normal)
         return -na_esfera_unitaria;
 }
 
+Vec3 refletir(const Vec3& v, const Vec3& n)
+{
+    return v - 2*escalar(v, n)*n;
+}
+
 // Outros aliases
 using Point3 = Vec3; // Ponto 3D
 using Cor = Vec3; // cor RGB
