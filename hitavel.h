@@ -2,11 +2,15 @@
 #define HITAVEL_H
 
 #include "ray.h"
+#include "utilitarios.h"
+
+class Material;
 
 struct Hit_registro
 {
     Point3 p;
     Vec3 normal;
+    shared_ptr<Material> mat_ptr;
     double t;
     bool face_frontal;
 

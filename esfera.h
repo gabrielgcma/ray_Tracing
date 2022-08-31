@@ -9,9 +9,10 @@ class Esfera : public Hitavel
     public:
         Point3 centro;
         double raio;
+        shared_ptr<Material> mat_ptr;
 
         Esfera() {}
-        Esfera(Point3 centro, double r) : centro(centro), raio(r) {};
+        Esfera(Point3 centro, double r, shared_ptr<Material> m) : centro(centro), raio(r), mat_ptr(m) {};
 
         virtual bool hit(const Ray& r, double t_min, double t_max, Hit_registro& reg) const override;
 };
@@ -42,6 +43,7 @@ bool Esfera::hit(const Ray& r, double t_min, double t_max, Hit_registro& reg) co
     reg.p = r.at(reg.t);
     Vec3 normal_para_fora = (reg.p - centro) / raio;
     reg.setar_normal_face(r, normal_para_fora);
+    reg.mat_ptr = mat_ptr;
 
     return true;
 }

@@ -84,6 +84,15 @@ class Vec3
                         double_aleatorio(min, max), 
                         double_aleatorio(min, max));
         }
+
+        bool quase_zero() const 
+        {
+            // Retorna true se o vetor é quase zero em todas as dimensões
+            constexpr auto s = 1e-8;
+            return (fabs(coords[0]) < s) && 
+                   (fabs(coords[1]) < s) &&
+                   (fabs(coords[2]) < s);
+        }
 };
 
 // ---------------------------------------------
