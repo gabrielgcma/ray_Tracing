@@ -59,4 +59,27 @@ class Metal : public Material
         }
 };
 
+class Dieletrico : public Material
+{
+    public: 
+        double ir; // índice de refração
+        Dieletrico(double indice_refra) : ir(indice_refra) {}
+
+        virtual bool dispersar
+        (
+            const Ray& r_in, const Hit_registro& reg, Cor& atenuacao, Ray& disperso
+        ) 
+        const override 
+        {
+            atenuacao = Cor(1.0, 1.0, 1.0);
+            double proporcao_refra = reg.face_frontal ? (1.0/ir) : ir;
+            
+            Vec3 direcao_unitaria = unitario(r_in.direcao());
+            Vec3 refratado = refratar(direcao_unitaria, reg.normal, proporcao_refra);
+
+            disperso = Ray(reg.p, refratado);
+            return true;
+        }
+};  
+
 #endif

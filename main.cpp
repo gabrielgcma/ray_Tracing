@@ -49,8 +49,8 @@ int main()
     Objs_Hitaveis mundo;
 
     auto material_chao = make_shared<Lambertian>(Cor(0.2, 0.8, 0.1));
-    auto material_centro = make_shared<Lambertian>(Cor(0.1, 0.3, 0.8));
-    auto material_esq = make_shared<Metal>(Cor(0.8, 0.1, 0.2), 0.3);
+    auto material_centro = make_shared<Dieletrico>(Cor(0.1, 0.3, 0.8));
+    auto material_esq = make_shared<Dieletrico>(Cor(0.8, 0.1, 0.2), 0.3);
     auto material_dir = make_shared<Metal>(Cor(0.2, 0.8, 0.6), 1.0);
     auto material_frente = make_shared<Metal>(Cor(0.5, 0.8, 0.8), 0.05);
 

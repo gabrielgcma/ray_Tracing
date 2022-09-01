@@ -190,6 +190,14 @@ Vec3 refletir(const Vec3& v, const Vec3& n)
     return v - 2*escalar(v, n)*n;
 }
 
+Vec3 refratar(const Vec3& uv, const Vec3& normal, double eta_i_sobre_eta_t)
+{
+    auto cos_theta = fmin(escalar(-uv, normal), 1.0);
+    Vec3 r_saida_perp = eta_i_sobre_eta_t * (uv + cos_theta*normal);
+    Vec3 r_saida_paralelo = -sqrt(fabs(1.0 - r_saida_perp.comprimento_ao_quadrado())) * normal;
+    return r_saida_perp + r_saida_paralelo;
+}
+
 // Outros aliases
 using Point3 = Vec3; // Ponto 3D
 using Cor = Vec3; // cor RGB
