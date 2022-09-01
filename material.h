@@ -42,8 +42,9 @@ class Metal : public Material
 {
     public:
         Cor albedo;
+        double fuzz;
 
-        Metal(const Cor& a) : albedo(a) {}
+        Metal(const Cor& a, double f) : albedo(a), fuzz(f < 1 ? f : 1) {}
 
         virtual bool dispersar
         (
@@ -52,7 +53,7 @@ class Metal : public Material
         const override 
         {
             Vec3 refletido = refletir(unitario(r_in.direcao()), reg.normal);
-            disperso = Ray(reg.p, refletido);
+            disperso = Ray(reg.p, refletido + fuzz*random_esf_unitaria());
             atenuacao = albedo;
             return (escalar(disperso.direcao(), reg.normal) > 0);
         }
