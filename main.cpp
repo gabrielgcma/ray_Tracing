@@ -55,7 +55,7 @@ int main()
 
     mundo.add(make_shared<Esfera>(Point3(0.0, -100.5, -1.0), 100.0, material_chao));
     mundo.add(make_shared<Esfera>(Point3(0.0, 0.0, -1.0), 0.5, material_centro));
-    mundo.add(make_shared<Esfera>(Point3(-1.0, 0.0, -1.0), 0.25, material_esq));
+    mundo.add(make_shared<Esfera>(Point3(-1.0, 0.0, -1.0), 0.25, m  aterial_esq));
     mundo.add(make_shared<Esfera>(Point3(1.0, 0.0, -1.0), 0.5, material_dir));
 
     // Câmera ----------------------------------------------------------------------------
