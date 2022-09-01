@@ -38,4 +38,24 @@ class Lambertian : public Material
         }
 };
 
+class Metal : public Material 
+{
+    public:
+        Cor albedo;
+
+        Metal(const Cor& a) : albedo(a) {}
+
+        virtual bool dispersar
+        (
+            const Ray& r_in, const Hit_registro& reg, Cor& atenuacao, Ray& disperso
+        ) 
+        const override 
+        {
+            Vec3 refletido = refletir(unitario(r_in.direcao()), reg.normal);
+            disperso = Ray(reg.p, refletido);
+            atenuacao = albedo;
+            return (escalar(disperso.direcao(), reg.normal) > 0);
+        }
+};
+
 #endif

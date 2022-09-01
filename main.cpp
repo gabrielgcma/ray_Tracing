@@ -4,6 +4,8 @@
 #include "objs_hitaveis.h"
 #include "esfera.h"
 #include "camera.h"
+#include "hitavel.h"
+#include "material.h"
 
 #include <iostream>
 
@@ -20,8 +22,13 @@ Cor ray_cor(const Ray& r, const Hitavel& mundo, int profundidade)
 
     if(mundo.hit(r, 0.001, infinito, reg))
     {
-        Point3 alvo = reg.p + random_no_hemisferio(reg.normal);
-        return 0.5 * ray_cor(Ray(reg.p, alvo - reg.p), mundo, profundidade-1);
+        Ray disperso;
+        Cor atenuacao;
+
+        if (reg.mat_ptr->dispersar(r, reg, atenuacao, disperso))
+            return atenuacao * ray_cor(disperso, mundo, profundidade-1);
+
+        return Cor(0, 0, 0);
     }
 
     Vec3 unitario_direcao = unitario(r.direcao());
@@ -31,22 +38,30 @@ Cor ray_cor(const Ray& r, const Hitavel& mundo, int profundidade)
 
 int main()
 {   
-    // Parâmetros da imagem a ser renderizada
+    // Parâmetros da imagem a ser renderizada --------------------------------------------
     const auto aspect_ratio = 16.0/9.0; 
     const int imgWidth = 800;
     const int imgHeight = static_cast<int>(imgWidth / aspect_ratio);
     const int samples_por_pixel = 100;
     const int max_profundidade = 50;
 
-    // Mundo 
+    // Mundo ------------------------------------------------------------------------------
     Objs_Hitaveis mundo;
-    mundo.add(make_shared<Esfera>(Point3(0, 0, -1), 0.5));
-    mundo.add(make_shared<Esfera>(Point3(0, -100.5, -1), 100));
 
-    // Câmera
+    auto material_chao = make_shared<Lambertian>(Cor(0.2, 0.8, 0.1));
+    auto material_centro = make_shared<Lambertian>(Cor(0.1, 0.3, 0.8));
+    auto material_esq = make_shared<Metal>(Cor(0.8, 0.1, 0.2));
+    auto material_dir = make_shared<Metal>(Cor(0.2, 0.8, 0.6));
+
+    mundo.add(make_shared<Esfera>(Point3(0.0, -100.5, -1.0), 100.0, material_chao));
+    mundo.add(make_shared<Esfera>(Point3(0.0, 0.0, -1.0), 0.5, material_centro));
+    mundo.add(make_shared<Esfera>(Point3(-1.0, 0.0, -1.0), 0.25, material_esq));
+    mundo.add(make_shared<Esfera>(Point3(1.0, 0.0, -1.0), 0.5, material_dir));
+
+    // Câmera ----------------------------------------------------------------------------
     Camera cam;
 
-    // Render
+    // Render ------------------------------------------------------------------------------
     cout<<"P3\n"<<imgWidth<<' '<<imgHeight<<"\n255\n";
     
     // i = linha, j = coluna
