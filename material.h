@@ -75,9 +75,20 @@ class Dieletrico : public Material
             double proporcao_refra = reg.face_frontal ? (1.0/ir) : ir;
             
             Vec3 direcao_unitaria = unitario(r_in.direcao());
-            Vec3 refratado = refratar(direcao_unitaria, reg.normal, proporcao_refra);
+            double cos_theta = fmin(escalar(-direcao_unitaria, reg.normal), 1.0);
+            double sin_theta = sqrt(1.0 - cos_theta*cos_theta);
 
-            disperso = Ray(reg.p, refratado);
+            // Não reflete se for true
+            bool nao_reflete = proporcao_refra * sin_theta > 1.0;
+            Vec3 direcao;
+
+            if(nao_reflete)
+                direcao = refletir(direcao_unitaria, reg.normal);
+            else  
+                direcao = refratar(direcao_unitaria, reg.normal, proporcao_refra);
+            
+            disperso = Ray(reg.p, direcao);
+
             return true;
         }
 };  
