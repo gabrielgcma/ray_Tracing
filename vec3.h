@@ -185,6 +185,16 @@ Vec3 random_no_hemisferio(const Vec3& normal)
         return -na_esfera_unitaria;
 }
 
+Vec3 random_no_disco_unitario()
+{
+    while (true)
+    {
+        auto p = Vec3(double_aleatorio(-1, 1), double_aleatorio(-1, 1), 0);
+        if (p.comprimento_ao_quadrado() >= 1) continue;
+        return p;
+    }
+}
+
 Vec3 refletir(const Vec3& v, const Vec3& n)
 {
     return v - 2*escalar(v, n)*n;

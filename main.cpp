@@ -63,7 +63,13 @@ int main()
     mundo.add(make_shared<Esfera>(Point3(-0.5, -0.4, -0.7), 0.10, material_frente));
 
     // Câmera ----------------------------------------------------------------------------
-    Camera cam(Point3(-2, 2, 1), Point3(0, 0, -1), Vec3(0, 1, 0), 90.0, aspect_ratio);
+    Point3 olharDe(3, 3, 2);
+    Point3 olharEm(0, 0, -1);
+    Vec3 viewUp(0, 1, 0);
+    auto dist_focal = (olharDe - olharEm).comprimento();
+    auto abertura = 0.5;
+
+    Camera cam(olharDe, olharEm, viewUp, 20, aspect_ratio, abertura, dist_focal);
 
     // Render ------------------------------------------------------------------------------
     cout<<"P3\n"<<imgWidth<<' '<<imgHeight<<"\n255\n";
