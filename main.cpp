@@ -49,14 +49,14 @@ int main()
     Objs_Hitaveis mundo;
 
     auto material_chao = make_shared<Lambertian>(Cor(0.25, 0.3, 0.38));
-    auto material_centro = make_shared<Dieletrico>(2.2);
+    auto material_centro = make_shared<Lambertian>(Cor(0.75, 0.15, 0.5));
     auto material_esq = make_shared<Dieletrico>(1.5);
     auto material_dir = make_shared<Metal>(Cor(0.2, 0.8, 0.6), 1.0);
     auto material_frente = make_shared<Metal>(Cor(0.5, 0.8, 0.8), 0.05);
 
     mundo.add(make_shared<Esfera>(Point3(0.0, -100.5, -1.0), 100.0, material_chao));
     mundo.add(make_shared<Esfera>(Point3(0.0, 0.0, -1.0), 0.5, material_centro));
-    mundo.add(make_shared<Esfera>(Point3(-1.0, 0.0, -1.0), 0.25, material_esq));
+    mundo.add(make_shared<Esfera>(Point3(-1.0, 0.0, -1.0), -0.25, material_esq));
     mundo.add(make_shared<Esfera>(Point3(1.0, 0.0, -1.0), 0.5, material_dir));
     mundo.add(make_shared<Esfera>(Point3(-0.5, -0.4, -0.7), 0.10, material_frente));
 

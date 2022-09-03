@@ -61,6 +61,15 @@ class Metal : public Material
 
 class Dieletrico : public Material
 {
+    private:
+        static double reflectancia(double cos, double ref_indx)
+        {
+            // Schlick's approx para reflectância
+            auto r0 = (1-ref_indx) / (1+ref_indx);
+            r0 = r0*r0;
+            return r0 + (1-r0)*pow((1-cos), 5);
+        }
+
     public: 
         double ir; // índice de refração
         Dieletrico(double indice_refra) : ir(indice_refra) {}
@@ -82,7 +91,7 @@ class Dieletrico : public Material
             bool nao_reflete = proporcao_refra * sin_theta > 1.0;
             Vec3 direcao;
 
-            if(nao_reflete)
+            if(nao_reflete  || reflectancia(cos_theta, proporcao_refra) > double_aleatorio())
                 direcao = refletir(direcao_unitaria, reg.normal);
             else  
                 direcao = refratar(direcao_unitaria, reg.normal, proporcao_refra);
