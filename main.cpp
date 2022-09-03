@@ -46,6 +46,8 @@ int main()
     const int max_profundidade = 50;
 
     // Mundo ------------------------------------------------------------------------------
+    //auto R = cos(pi/4); // Ângulo do fov
+
     Objs_Hitaveis mundo;
 
     auto material_chao = make_shared<Lambertian>(Cor(0.25, 0.3, 0.38));
@@ -61,7 +63,7 @@ int main()
     mundo.add(make_shared<Esfera>(Point3(-0.5, -0.4, -0.7), 0.10, material_frente));
 
     // Câmera ----------------------------------------------------------------------------
-    Camera cam;
+    Camera cam(120.0, aspect_ratio);
 
     // Render ------------------------------------------------------------------------------
     cout<<"P3\n"<<imgWidth<<' '<<imgHeight<<"\n255\n";

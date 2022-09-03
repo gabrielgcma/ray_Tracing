@@ -12,11 +12,17 @@ class Camera
         Vec3 vertical;
 
     public: 
-        Camera() 
-        {
-            auto aspect_ratio = 16.0/9.0;
-            auto viewport_altura = 2.0;
+        Camera
+        (
+            double vfov, // field of view vertical, em graus
+            double aspect_ratio
+        ) 
+        {   
+            auto theta = graus_p_radianos(vfov);
+            auto h = tan(theta/2);
+            auto viewport_altura = 2.0 * h;
             auto viewport_largura = aspect_ratio * viewport_altura;
+            
             auto comp_focal = 1.0;
 
             origem = Point3(0, 0, 0);
