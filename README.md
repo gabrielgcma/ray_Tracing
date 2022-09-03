@@ -6,5 +6,5 @@ Estágio atual: adicionando reflexões e materiais.
 Render atual: 
 
 <p align="center"> 
-  <img src="./preview.png">  
+  <img src="./pre.png">  
 </p>
