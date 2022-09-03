@@ -63,7 +63,7 @@ int main()
     mundo.add(make_shared<Esfera>(Point3(-0.5, -0.4, -0.7), 0.10, material_frente));
 
     // Câmera ----------------------------------------------------------------------------
-    Camera cam(120.0, aspect_ratio);
+    Camera cam(Point3(-2, 2, 1), Point3(0, 0, -1), Vec3(0, 1, 0), 90.0, aspect_ratio);
 
     // Render ------------------------------------------------------------------------------
     cout<<"P3\n"<<imgWidth<<' '<<imgHeight<<"\n255\n";

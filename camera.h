@@ -14,6 +14,9 @@ class Camera
     public: 
         Camera
         (
+            Point3 olharDe,
+            Point3 olharEm,
+            Vec3 viewUp,
             double vfov, // field of view vertical, em graus
             double aspect_ratio
         ) 
@@ -22,18 +25,20 @@ class Camera
             auto h = tan(theta/2);
             auto viewport_altura = 2.0 * h;
             auto viewport_largura = aspect_ratio * viewport_altura;
-            
-            auto comp_focal = 1.0;
 
-            origem = Point3(0, 0, 0);
-            horizontal = Vec3(viewport_largura, 0, 0);
-            vertical = Vec3(0, viewport_altura, 0);
-            canto_inferior_esquerdo = origem - horizontal/2 - vertical/2 - Vec3(0, 0, comp_focal);
+            auto w = unitario(olharDe - olharEm);
+            auto u = unitario(prod_vetorial(viewUp, w));
+            auto v = prod_vetorial(w, u);
+
+            origem = olharDe;
+            horizontal = viewport_largura * u;
+            vertical = viewport_altura * v;
+            canto_inferior_esquerdo = origem - horizontal/2 - vertical/2 - w;
         }
 
-        Ray get_ray(double u, double v) const 
+        Ray get_ray(double s, double t) const 
         {
-            return Ray(origem, canto_inferior_esquerdo + u*horizontal + v*vertical - origem);
+            return Ray(origem, canto_inferior_esquerdo + s*horizontal + t*vertical - origem);
         }
 };
 
