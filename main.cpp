@@ -15,31 +15,6 @@ using std::cin;
 using std::cout;
 using std::vector;
 
-/*
-
-double media_rendertime(vector<double> tempo_entre_scanlines)
-{
-    double soma = 0;
-    for(double tempo : tempo_entre_scanlines)
-        soma += tempo;
-
-    double media = soma / tempo_entre_scanlines.size();
-
-    return media; 
-}
-
-void eta(double media_rendertime, int scanlines_restantes)
-{
-    double etaSegundos = media_rendertime * scanlines_restantes;
-    
-    int horas = etaSegundos / 3600;
-    int minutos = etaSegundos / 60;
-
-    cout << "Tempo estimado de conclusão: " << horas << ":" << minutos << "" << std::flush;
-}
-
-*/
-
 // Calcular a cor de um pixel atingido por um raio
 Cor ray_cor(const Ray &r, const Hitavel &mundo, int profundidade)
 {
@@ -65,19 +40,19 @@ Cor ray_cor(const Ray &r, const Hitavel &mundo, int profundidade)
     return (1.0 - t) * Cor(1.0, 1.0, 1.0) + t * Cor(0.5, 0.7, 1.0);
 }
 
-Objs_Hitaveis cena_aleataoria()
+Objs_Hitaveis cena_aleatoria()
 {
     Objs_Hitaveis mundo;
 
-    auto material_chao = make_shared<Lambertian>(Cor(0.1, 0.1, 0.1));
-    mundo.add(make_shared<Esfera>(Point3(0, -1000, 0), 100, material_chao));
+    auto material_chao = make_shared<Lambertian>(Cor(0.5, 0.5, 0.5));
+    mundo.add(make_shared<Esfera>(Point3(0, -1000, 0), 1000, material_chao));
 
-    for (int a = -11; a < 11; a++)
+    for (int a = -10; a < 10; a++)
     {
-        for (int b = -11; b < 11; b++)
+        for (int b = -10; b < 10; b++)
         {
             auto escolher_material = double_aleatorio();
-            Point3 centro(a + 0.9 * double_aleatorio(), 0.2, b + 0.9 * double_aleatorio());
+            Point3 centro(a + 0.9*double_aleatorio(), 0.2, b + 0.9*double_aleatorio());
 
             if ((centro - Point3(4, 0.2, 0)).comprimento() > 0.9)
             {
@@ -133,14 +108,14 @@ int main()
     const int max_profundidade = 50;
 
     // Mundo ------------------------------------------------------------------------------
-    auto mundo = cena_aleataoria();
+    auto mundo = cena_aleatoria();
 
     // Câmera ----------------------------------------------------------------------------
     Point3 olharDe(13, 2, 3);
     Point3 olharEm(0, 0, 0);
     Vec3 viewUp(0, 1, 0);
     auto dist_focal = 10.0;
-    auto abertura = 0.5;
+    auto abertura = 0.1;
 
     Camera cam(olharDe, olharEm, viewUp, 20, aspect_ratio, abertura, dist_focal);
 
